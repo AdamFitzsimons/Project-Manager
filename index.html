@@ -22,6 +22,7 @@
     --abyss: #041D56;
     --trench: #01082D;
     --foam: #F3FAFE;
+    --paper: #F8F6F2;
 
     --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
     --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -139,19 +140,14 @@
     .porthole { order: -1; width: 168px; }
   }
 
-  /* About: same look as at a glance */
-  .about { background: var(--deep); }
-  .about p { font-size: 1.2rem; max-width: 62ch; color: var(--foam); }
+  /* About: the light section, warm off-white with dark blue text */
+  .about { background: var(--paper); border-top: 0; }
+  .about h2 { color: var(--deep); }
+  .about p { font-size: 1.2rem; max-width: 62ch; color: var(--abyss); }
   .about p + p { margin-top: 1.1em; }
 
   /* At a glance */
-  .glance { background: var(--deep); }
-  .glance .lead {
-    font-size: 1.2rem;
-    max-width: 46ch;
-    color: var(--foam);
-    margin-bottom: clamp(28px, 4vw, 40px);
-  }
+  .glance { background: var(--deep); border-top: 0; }
   .stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.5fr);
@@ -177,7 +173,28 @@
     .stats li:nth-child(odd) { padding-left: 0; border-left: 0; }
   }
 
-  .interests { margin-top: clamp(32px, 5vw, 48px); }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    margin: clamp(28px, 4vw, 40px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .facts li { display: flex; align-items: center; gap: 12px; font-size: 1.15rem; color: #fff; }
+  .facts .icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(173, 225, 251, 0.55);
+    border-radius: 50%;
+    color: var(--sky);
+  }
+  .facts svg { width: 20px; height: 20px; display: block; }
+
+  .interests { margin-top: clamp(28px, 4vw, 40px); }
   .interests h3 { font-size: 1.15rem; font-weight: 600; color: var(--foam); margin-bottom: 14px; }
   .interests ul { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
   .interests li {
@@ -253,12 +270,21 @@
     <div class="wrap split">
       <h2 id="glance-h">At a glance</h2>
       <div>
-        <p class="lead">Based in Berlin. Open to project management, operations and logistics roles in Berlin and Ireland.</p>
         <ul class="stats">
           <li><span class="stat-num">9+</span><span class="stat-label">years of experience</span></li>
           <li><span class="stat-num">7</span><span class="stat-label">physical products released</span></li>
           <li><span class="stat-num">20+</span><span class="stat-label">projects led</span></li>
           <li><span class="stat-num">€2k&nbsp;to €100k+</span><span class="stat-label">project budgets</span></li>
+        </ul>
+        <ul class="facts">
+          <li>
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+            <span>Berlin</span>
+          </li>
+          <li>
+            <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <span>Open to roles in Berlin or Ireland</span>
+          </li>
         </ul>
         <div class="interests">
           <h3>Interested in</h3>
