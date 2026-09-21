@@ -12,21 +12,26 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F2573'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='700' font-size='27' text-anchor='middle' fill='%23ADE1FB'%3EAF%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- FONTS: to change fonts, pick new ones on fonts.google.com, replace this link, then update --display and --body below -->
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* Colour palette: light surface water down to the deep trench */
+  /* ============================================================
+     EDIT HERE: colours and fonts used across the whole page.
+     Change a value once and it updates everywhere it is used.
+     ============================================================ */
   :root {
-    --sky: #ADE1FB;
-    --sea: #266CA9;
-    --deep: #0F2573;
-    --abyss: #041D56;
-    --trench: #01082D;
-    --foam: #F3FAFE;
-    --paper: #F8F6F2;
+    --sky: #ADE1FB;      /* light blue: headings and accents on dark sections */
+    --sea: #266CA9;      /* mid blue: stat numbers and photo ring */
+    --deep: #0F2573;     /* deep blue: experience section, headings on light sections */
+    --abyss: #041D56;    /* dark blue: header and education */
+    --trench: #01082D;   /* darkest blue: contact section */
+    --foam: #F3FAFE;     /* near-white text on dark sections */
+    --paper: #F8F6F2;    /* warm off-white: the light sections */
 
-    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
-    --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;  /* headings */
+    --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;                 /* body text */
   }
+  /* ============================================================ */
 
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -69,7 +74,7 @@
     color: var(--sky);
   }
 
-  /* Straight hairline between every section */
+  /* Thin line between sections (individual sections switch it off where the colour change is enough) */
   main > * + * { border-top: 1px solid rgba(173, 225, 251, 0.3); }
 
   /* Buttons */
@@ -91,7 +96,7 @@
   .btn:hover { background: var(--btn-hover-bg); color: var(--btn-hover-fg); border-color: var(--btn-hover-bg); }
   .btn:focus-visible { outline: 3px solid var(--btn-focus); outline-offset: 3px; }
 
-  /* Header: dark, same look as the experience section */
+  /* ---------- Header (dark) ---------- */
   .hero {
     background: var(--abyss);
     color: var(--foam);
@@ -140,14 +145,15 @@
     .porthole { order: -1; width: 168px; }
   }
 
-  /* About: the light section, warm off-white with dark blue text */
-  .about { background: var(--paper); border-top: 0; }
-  .about h2 { color: var(--deep); }
+  /* ---------- Light sections (at a glance and about me) ---------- */
+  .light { background: var(--paper); color: var(--abyss); border-top: 0; }
+  .light h2 { color: var(--deep); }
+  .light + .light { border-top: 1px solid rgba(4, 29, 86, 0.14); }
+
   .about p { font-size: 1.2rem; max-width: 62ch; color: var(--abyss); }
   .about p + p { margin-top: 1.1em; }
 
-  /* At a glance */
-  .glance { background: var(--deep); border-top: 0; }
+  /* Stats */
   .stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.5fr);
@@ -156,7 +162,7 @@
     padding: 0;
     list-style: none;
   }
-  .stats li { padding: 4px 18px; border-left: 1px solid rgba(173, 225, 251, 0.35); }
+  .stats li { padding: 4px 18px; border-left: 1px solid rgba(15, 37, 115, 0.25); }
   .stats li:first-child { padding-left: 0; border-left: 0; }
   .stat-num {
     display: block;
@@ -165,14 +171,15 @@
     font-size: clamp(2rem, 4.4vw, 3rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
-    color: var(--sky);
+    color: var(--sea);
   }
-  .stat-label { display: block; margin-top: 6px; font-size: 0.98rem; color: var(--foam); opacity: 0.92; }
+  .stat-label { display: block; margin-top: 6px; font-size: 0.98rem; color: var(--abyss); }
   @media (max-width: 720px) {
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .stats li:nth-child(odd) { padding-left: 0; border-left: 0; }
   }
 
+  /* Location and search rows */
   .facts {
     display: flex;
     flex-wrap: wrap;
@@ -181,50 +188,76 @@
     padding: 0;
     list-style: none;
   }
-  .facts li { display: flex; align-items: center; gap: 12px; font-size: 1.15rem; color: #fff; }
+  .facts li { display: flex; align-items: center; gap: 12px; font-size: 1.15rem; color: var(--abyss); }
   .facts .icon {
     flex: none;
     display: grid;
     place-items: center;
     width: 42px;
     height: 42px;
-    border: 1px solid rgba(173, 225, 251, 0.55);
+    border: 1px solid rgba(15, 37, 115, 0.45);
     border-radius: 50%;
-    color: var(--sky);
+    color: var(--deep);
   }
   .facts svg { width: 20px; height: 20px; display: block; }
 
-  .interests { margin-top: clamp(28px, 4vw, 40px); }
-  .interests h3 { font-size: 1.15rem; font-weight: 600; color: var(--foam); margin-bottom: 14px; }
-  .interests ul { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
-  .interests li {
+  /* Languages and interests */
+  .tag-groups {
+    display: grid;
+    gap: 28px;
+    margin-top: clamp(28px, 4vw, 40px);
+  }
+  .tag-group h3 { font-size: 1.15rem; font-weight: 600; color: var(--deep); margin-bottom: 14px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .tags li {
     padding: 0.4rem 1rem;
-    border: 1px solid rgba(173, 225, 251, 0.55);
+    border: 1px solid rgba(15, 37, 115, 0.45);
     border-radius: 999px;
     font-size: 0.98rem;
+    color: var(--abyss);
+    cursor: default;
   }
 
-  /* Experience */
-  .experience { background: var(--abyss); }
-  .roles { margin: 0; padding: 0; list-style: none; }
-  .roles li {
+  /* Hover states for the icons and tags */
+  .tags li, .facts .icon {
+    transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s;
+  }
+  @media (hover: hover) {
+    .tags li:hover { background: var(--deep); border-color: var(--deep); color: #fff; }
+    .facts li:hover .icon { background: var(--deep); border-color: var(--deep); color: var(--sky); }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .tags li:hover { transform: scale(1.06); }
+    .facts li:hover .icon { transform: scale(1.12); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tags li, .facts .icon { transition: none; }
+  }
+
+  /* ---------- Dark list sections (experience and education) ---------- */
+  .experience { background: var(--deep); border-top: 0; }
+  .education { background: var(--abyss); }
+
+  .entries { margin: 0; padding: 0; list-style: none; }
+  .entries li {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 4px 24px;
     padding: 20px 0;
     border-top: 1px solid rgba(173, 225, 251, 0.3);
   }
-  .roles li:first-child { padding-top: 0; border-top: 0; }
-  .roles li:last-child { padding-bottom: 0; }
-  .roles h3 { font-size: 1.25rem; font-weight: 700; color: #fff; }
-  .roles .org { color: var(--sky); font-size: 1.02rem; }
-  .roles .when { color: var(--foam); opacity: 0.85; white-space: nowrap; }
+  .entries li:first-child { padding-top: 0; border-top: 0; }
+  .entries li:last-child { padding-bottom: 0; }
+  .entries h3 { font-size: 1.25rem; font-weight: 700; color: #fff; }
+  .entries .org { color: var(--sky); font-size: 1.02rem; }
+  .entries .when { color: var(--foam); opacity: 0.85; white-space: nowrap; }
+  .entries .note { grid-column: 1 / -1; margin-top: 6px; max-width: 58ch; color: var(--foam); font-size: 1rem; }
   @media (max-width: 720px) {
-    .roles li { grid-template-columns: 1fr; }
-    .roles .when { white-space: normal; }
+    .entries li { grid-template-columns: 1fr; }
+    .entries .when { white-space: normal; }
   }
 
-  /* Contact: the deepest water */
+  /* ---------- Contact (darkest) ---------- */
   .contact {
     background: var(--trench);
     padding-bottom: clamp(56px, 9vw, 112px);
@@ -256,17 +289,7 @@
     </div>
   </header>
 
-  <section class="band about" aria-labelledby="about-h">
-    <div class="wrap split">
-      <h2 id="about-h">About me</h2>
-      <div>
-        <p>I've spent 9+ years turning creative ambition into real-world results; releasing digital and physical products, producing live events, working directly with clients to bring their vision to life. Managing people, timelines and budgets across diverse teams is where I thrive.</p>
-        <p>After years running things from behind a screen, I stepped into a hands-on technical role at Dance GmbH to broaden my understanding of operational workflows. Now I'm excited to bring that end-to-end perspective and cross-industry experience to a new field.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="band glance" aria-labelledby="glance-h">
+  <section class="band light glance" aria-labelledby="glance-h">
     <div class="wrap split">
       <h2 id="glance-h">At a glance</h2>
       <div>
@@ -286,16 +309,35 @@
             <span>Open to roles in Berlin or Ireland</span>
           </li>
         </ul>
-        <div class="interests">
-          <h3>Interested in</h3>
-          <ul>
-            <li>Mobility</li>
-            <li>Events</li>
-            <li>Consumer products</li>
-            <li>Environment and sustainability</li>
-            <li>Technology</li>
-          </ul>
+        <div class="tag-groups">
+          <div class="tag-group">
+            <h3>Languages</h3>
+            <ul class="tags">
+              <li>English (native)</li>
+              <li>German (B2)</li>
+            </ul>
+          </div>
+          <div class="tag-group">
+            <h3>Interested in</h3>
+            <ul class="tags">
+              <li>Mobility</li>
+              <li>Events</li>
+              <li>Consumer products</li>
+              <li>Environment and sustainability</li>
+              <li>Technology</li>
+            </ul>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band light about" aria-labelledby="about-h">
+    <div class="wrap split">
+      <h2 id="about-h">About me</h2>
+      <div>
+        <p>I've spent 9+ years turning creative ambition into real-world results; releasing digital and physical products, producing live events, working directly with clients to bring their vision to life. Managing people, timelines and budgets across diverse teams is where I thrive.</p>
+        <p>After years running things from behind a screen, I stepped into a hands-on technical role at Dance GmbH to broaden my understanding of operational workflows. Now I'm excited to bring that end-to-end perspective and cross-industry experience to a new field.</p>
       </div>
     </div>
   </section>
@@ -303,7 +345,7 @@
   <section class="band experience" aria-labelledby="exp-h">
     <div class="wrap split">
       <h2 id="exp-h">Experience</h2>
-      <ul class="roles">
+      <ul class="entries">
         <li>
           <div>
             <h3>Vehicle Technician and Delivery Specialist</h3>
@@ -324,6 +366,36 @@
             <p class="org">SUNANDBASS Music Festival</p>
           </div>
           <p class="when">2019 to 2024</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band education" aria-labelledby="edu-h">
+    <div class="wrap split">
+      <h2 id="edu-h">Education</h2>
+      <ul class="entries">
+        <li>
+          <div>
+            <h3>Certified Associate in Project Management (CAPM)</h3>
+            <p class="org">PMI. In progress</p>
+          </div>
+          <p class="when">Expected October 2026</p>
+        </li>
+        <li>
+          <div>
+            <h3>Certificate in UX/UI Design</h3>
+            <p class="org">Ironhack Bootcamp</p>
+          </div>
+          <p class="when">2024</p>
+          <p class="note">Awarded the bootcamp's only final prize, for Best Project Presentation.</p>
+        </li>
+        <li>
+          <div>
+            <h3>Bachelor's degree in Commercial Music Business</h3>
+            <p class="org">Technological Institute Dublin</p>
+          </div>
+          <p class="when">2012 to 2016</p>
         </li>
       </ul>
     </div>
