@@ -116,15 +116,15 @@
     position: absolute;
     inset: -40px;
     pointer-events: none;
-    background-image: radial-gradient(rgba(173, 225, 251, 0.09) 1px, transparent 1px);
-    background-size: 34px 34px;
+    background-image: radial-gradient(rgba(173, 225, 251, 0.13) 0.6px, transparent 0.6px);
+    background-size: 13px 13px;
   }
   @media (prefers-reduced-motion: no-preference) {
     .hero::after { animation: drift 70s linear infinite; }
   }
   @keyframes drift {
     from { background-position: 0 0; }
-    to { background-position: 34px 17px; }
+    to { background-position: 13px 13px; }
   }
   .hero .wrap { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: clamp(24px, 5vw, 64px); }
   .hero h1 {
@@ -183,20 +183,33 @@
   .about p { font-size: 1.2rem; max-width: 62ch; color: var(--abyss); }
   .about p + p { margin-top: 1.1em; }
 
+  /* Stats sit in their own raised panel, as the section's headline moment */
+  .glance-panel {
+    background: #fff;
+    border: 1px solid rgba(15, 37, 115, 0.07);
+    border-radius: 18px;
+    padding: clamp(20px, 3.4vw, 32px) clamp(20px, 4vw, 36px);
+    box-shadow: 0 1px 2px rgba(15, 37, 115, 0.05), 0 10px 28px rgba(15, 37, 115, 0.07);
+  }
   .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.5fr); gap: 24px 0; margin: 0; padding: 0; list-style: none; }
-  .stats li { padding: 4px 18px; border-left: 1px solid rgba(15, 37, 115, 0.25); }
+  .stats li { padding: 4px 18px; border-left: 1px solid rgba(15, 37, 115, 0.2); }
   .stats li:first-child { padding-left: 0; border-left: 0; }
   .stat-num { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--sea); }
   .stat-label { display: block; margin-top: 6px; font-size: 0.98rem; color: var(--abyss); }
   @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats li:nth-child(odd) { padding-left: 0; border-left: 0; } }
 
-  .facts { display: flex; flex-wrap: wrap; gap: 16px 40px; margin: clamp(28px, 4vw, 40px) 0 0; padding: 0; list-style: none; }
-  .facts li { display: flex; align-items: center; gap: 12px; font-size: 1.15rem; color: var(--abyss); }
-  .facts .icon { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(15, 37, 115, 0.45); border-radius: 50%; color: var(--deep); transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s; }
-  .facts svg { width: 20px; height: 20px; display: block; }
+  /* Two calmer columns below the panel: location/languages, and interests */
+  .glance-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); margin-top: clamp(28px, 4vw, 40px); }
+  @media (max-width: 720px) { .glance-cols { grid-template-columns: 1fr; gap: 28px; } }
 
-  .tag-groups { display: grid; gap: 28px; margin-top: clamp(28px, 4vw, 40px); }
-  .tag-group h3 { font-size: 1.15rem; font-weight: 600; color: var(--deep); margin-bottom: 14px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 16px 28px; margin: 0; padding: 0; list-style: none; }
+  .facts li { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; color: var(--abyss); }
+  .facts .icon { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(15, 37, 115, 0.45); border-radius: 50%; color: var(--deep); transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s; }
+  .facts svg { width: 18px; height: 18px; display: block; }
+
+  .tag-group { margin-top: 22px; }
+  .tag-group:first-child { margin-top: 0; }
+  .tag-group h3 { font-size: 1.1rem; font-weight: 600; color: var(--deep); margin-bottom: 12px; }
   .tags { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
   .tags li { padding: 0.4rem 1rem; border: 1px solid rgba(15, 37, 115, 0.45); border-radius: 999px; font-size: 0.98rem; color: var(--abyss); cursor: default; transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s; }
 
@@ -303,33 +316,39 @@
       <div class="wrap split">
         <h2 id="glance-h">At a glance</h2>
         <div>
-          <ul class="stats stagger">
-            <li><span class="stat-num">9+</span><span class="stat-label">years of experience</span></li>
-            <li><span class="stat-num">7</span><span class="stat-label">physical products released</span></li>
-            <li><span class="stat-num">20+</span><span class="stat-label">projects led</span></li>
-            <li><span class="stat-num">€2k&nbsp;to €100k+</span><span class="stat-label">project budgets</span></li>
-          </ul>
-          <ul class="facts">
-            <li>
-              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-              <span>Berlin</span>
-            </li>
-            <li>
-              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
-              <span>Open to roles in Berlin or Ireland</span>
-            </li>
-          </ul>
-          <div class="tag-groups">
-            <div class="tag-group">
-              <h3>Languages</h3>
-              <ul class="tags"><li>English (native)</li><li>German (B2)</li></ul>
-            </div>
-            <div class="tag-group">
-              <h3>Interested in</h3>
-              <ul class="tags">
-                <li>Mobility</li><li>Events</li><li>Consumer products</li>
-                <li>Environment and sustainability</li><li>Technology</li>
+          <div class="glance-panel">
+            <ul class="stats stagger">
+              <li><span class="stat-num">9+</span><span class="stat-label">years of experience</span></li>
+              <li><span class="stat-num">7</span><span class="stat-label">physical products released</span></li>
+              <li><span class="stat-num">20+</span><span class="stat-label">projects led</span></li>
+              <li><span class="stat-num">€2k&nbsp;to €100k+</span><span class="stat-label">project budgets</span></li>
+            </ul>
+          </div>
+          <div class="glance-cols">
+            <div class="glance-col">
+              <ul class="facts">
+                <li>
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                  <span>Berlin</span>
+                </li>
+                <li>
+                  <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+                  <span>Open to roles in Berlin or Ireland</span>
+                </li>
               </ul>
+              <div class="tag-group">
+                <h3>Languages</h3>
+                <ul class="tags"><li>English (native)</li><li>German (B2)</li></ul>
+              </div>
+            </div>
+            <div class="glance-col">
+              <div class="tag-group">
+                <h3>Interested in</h3>
+                <ul class="tags">
+                  <li>Mobility</li><li>Events</li><li>Consumer products</li>
+                  <li>Environment and sustainability</li><li>Technology</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -365,11 +384,8 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Coordinate scheduling and quality control across mechanical prep and repair workflows</li>
-                    <li>Act as the link between technicians, drivers and operations to keep delivery timelines on track</li>
-                    <li>Placeholder: swap in your own specifics here</li>
+                    <li>Support vehicle preparation and repair workflows, coordinating with mechanical, QC and operations teams to keep things on schedule and to a consistent standard.</li>
                   </ul>
-                  <p class="placeholder-note">Example bullets. Replace with what you actually did.</p>
                 </details>
               </div>
             </li>
@@ -383,11 +399,8 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Placeholder: managed timelines and budgets across releases or tours</li>
-                    <li>Placeholder: main point of contact for artists, labels or partners</li>
-                    <li>Placeholder: swap in your own specifics here</li>
+                    <li>Led 20+ end-to-end projects, including physical product manufacturing and international events, managing timelines, budgets and client relationships.</li>
                   </ul>
-                  <p class="placeholder-note">Example bullets. Replace with what you actually did.</p>
                 </details>
               </div>
             </li>
@@ -401,11 +414,8 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Placeholder: ran on-site logistics for the festival</li>
-                    <li>Placeholder: coordinated vendors, crew or scheduling</li>
-                    <li>Placeholder: swap in your own specifics here</li>
+                    <li>Coordinated production operations for 300+ external contractors and stakeholders across a 10-month cycle, including logistics, scheduling and a website UX redesign.</li>
                   </ul>
-                  <p class="placeholder-note">Example bullets. Replace with what you actually did.</p>
                 </details>
               </div>
             </li>
