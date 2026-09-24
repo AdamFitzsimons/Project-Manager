@@ -192,6 +192,12 @@
   .stats li:first-child { padding-left: 0; border-left: 0; }
   .stat-num { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--sea); }
   .stat-label { display: block; margin-top: 6px; font-size: 0.98rem; color: var(--abyss); }
+  /* Slot machine digits (built by the script below; plain text is used when motion is reduced) */
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .stat-num .word { display: inline-block; white-space: nowrap; }
+  .stat-num .reel { display: inline-block; vertical-align: top; height: 1.05em; overflow: hidden; padding: 0 0.08em; margin: 0 -0.08em; }
+  .stat-num .reel-strip { display: block; }
+  .stat-num .reel-strip span { display: block; height: 1.05em; line-height: 1.05; text-align: center; }
   @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats li:nth-child(odd) { padding-left: 0; border-left: 0; } }
 
   /* Two calmer columns below the panel: location/languages, and interests */
@@ -318,7 +324,7 @@
               <li><span class="stat-num">9+</span><span class="stat-label">years of experience</span></li>
               <li><span class="stat-num">7</span><span class="stat-label">physical products released</span></li>
               <li><span class="stat-num">20+</span><span class="stat-label">projects led</span></li>
-              <li><span class="stat-num">€2k&nbsp;to €100k+</span><span class="stat-label">project budgets</span></li>
+              <li><span class="stat-num">€2k&nbsp;to €150k+</span><span class="stat-label">project budgets</span></li>
             </ul>
           </div>
           <div class="glance-cols">
@@ -384,7 +390,9 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Support vehicle preparation and repair workflows, coordinating with mechanical, QC and operations teams to keep things on schedule and to a consistent standard.</li>
+                    <li>Prepared and quality-checked bikes and mopeds to delivery standard, performing repairs and maintenance while coordinating with mechanical, QC, inventory and operations teams to ensure on-time order fulfilment</li>
+                    <li>Resolve 85% of repairs on the first visit through structured diagnosis and review repeat cases to improve accuracy</li>
+                    <li>Ranked 2nd of 6 in the team for daily tasks completed, while keeping quality and delivery standards consistent</li>
                   </ul>
                 </details>
               </div>
@@ -399,7 +407,11 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Led 20+ end-to-end projects, including physical product manufacturing and international events, managing timelines, budgets and client relationships.</li>
+                    <li>Managed 20+ product lifecycles, digital and physical (merchandise, vinyl and other products), from concept through manufacturing to delivery, on budgets from €1k to €150k, with no missed deadlines</li>
+                    <li>Coordinated directly with manufacturers and factories in the US and Europe, planning lead times accordingly and reordering stock to keep clients supplied</li>
+                    <li>Ran D2C e-commerce for my client roster: uploaded products, managed sales and handled accounting, plus ticket and merchandise sales through our own system</li>
+                    <li>Built and maintained a centralised, live tour documentation system (Drive, Sheets, shared calendar) used on 6+ tours, including 2 world tours across four continents, replacing ad-hoc calls and emails and keeping teams, external crew and venues aligned across 10-40 dates per tour</li>
+                    <li>Prepared proposals and cost estimates, handled invoicing and acted as day-to-day client contact</li>
                   </ul>
                 </details>
               </div>
@@ -414,7 +426,9 @@
                 <details>
                   <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
                   <ul class="bullets">
-                    <li>Coordinated production operations for 300+ external contractors and stakeholders across a 10-month cycle, including logistics, scheduling and a website UX redesign.</li>
+                    <li>Coordinated scheduling, travel, accommodation, vendor management and availability planning for 300+ international artists and staff across a 10-month production cycle</li>
+                    <li>Maintained a centralized operational database linking 5 departments, improving data accuracy, cross-functional coordination and access to up-to-date production information</li>
+                    <li>Supported onboarding and information flow for artists, staff and external partners by maintaining documentation, schedules and operational updates</li>
                   </ul>
                 </details>
               </div>
@@ -431,6 +445,12 @@
                   <div><h3>Bachelor's degree in Commercial Music Business</h3><p class="org">Technological Institute Dublin</p></div>
                   <p class="when">2012 to 2016</p>
                 </div>
+                <details>
+                  <summary>Learn more <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
+                  <ul class="bullets">
+                    <li>Studied project, production and event management, including tour planning and logistics, release planning, marketing and the budgeting and coordination of live and recorded projects</li>
+                  </ul>
+                </details>
               </div>
             </li>
             <li class="t-item">
@@ -504,11 +524,55 @@
     });
   }
 
+  // Slot machine effect for the big numbers in "At a glance": each digit spins down and lands, left to right
+  function rollStats(list) {
+    if (reducedMotion || !list.animate) return;
+    var run = function () {
+      list.querySelectorAll('.stat-num').forEach(function (num, si) {
+        var text = num.textContent;
+        var size = parseFloat(getComputedStyle(num).fontSize);
+        num.textContent = '';
+        var sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = text;
+        var vis = document.createElement('span'); vis.setAttribute('aria-hidden', 'true');
+        num.appendChild(sr); num.appendChild(vis);
+        var k = 0;
+        text.split(' ').forEach(function (word, wi, all) {
+          var w = document.createElement('span'); w.className = 'word';
+          vis.appendChild(w);
+          word.split('').forEach(function (ch) {
+            if (!/\d/.test(ch)) { w.appendChild(document.createTextNode(ch)); return; }
+            var dur = 1200 + k * 350, n = Math.round(dur / 60);
+            var reel = document.createElement('span'); reel.className = 'reel';
+            var strip = document.createElement('span'); strip.className = 'reel-strip';
+            var digits = [ch];
+            for (var i = 1; i < n; i++) digits.push(Math.floor(Math.random() * 10));
+            strip.innerHTML = digits.map(function (d) { return '<span>' + d + '</span>'; }).join('');
+            reel.appendChild(strip); w.appendChild(reel);
+            // keep each reel exactly as wide as the digit it lands on, so nothing shifts at the end
+            var probe = document.createElement('span');
+            probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
+            probe.textContent = ch; vis.appendChild(probe);
+            reel.style.width = (probe.getBoundingClientRect().width / size + 0.16) + 'em';
+            vis.removeChild(probe);
+            strip.animate([
+              { transform: 'translateY(-' + ((n - 1) * 1.05) + 'em)', filter: 'blur(2px)' },
+              { filter: 'blur(2px)', offset: 0.6 },
+              { transform: 'translateY(0)', filter: 'blur(0px)' }
+            ], { duration: dur, delay: si * 120, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
+            k++;
+          });
+          if (wi < all.length - 1) vis.appendChild(document.createTextNode(' '));
+        });
+      });
+    };
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(run);
+  }
+
   // Fade sections and lists up into view as the user scrolls
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); if (e.target.classList.contains('stats')) rollStats(e.target); }
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
     document.querySelectorAll('.reveal, .stagger').forEach(function (el) { io.observe(el); });
