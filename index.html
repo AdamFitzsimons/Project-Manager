@@ -134,12 +134,22 @@
   }
   .hero .role { margin-top: 18px; font-family: var(--display); font-size: clamp(1.3rem, 2.6vw, 1.8rem); font-weight: 600; color: var(--sky); }
 
+  /* Typing/deleting tagline: sits between the role and the Contact me button, styled like plain body text */
+  .hero .tagline { margin-top: 14px; max-width: 46ch; font-family: var(--body); font-size: 1.05rem; line-height: 1.55; color: var(--foam); opacity: 0.92; min-height: 3.3em; }
+  .tagline-static { display: none; }
+  .tagline-cursor { display: inline-block; width: 2px; height: 1em; vertical-align: -0.15em; margin-left: 2px; background: currentColor; }
+  @media (prefers-reduced-motion: no-preference) { .tagline-cursor { animation: caret-blink 1s step-end infinite; } }
+  @keyframes caret-blink { 50% { opacity: 0; } }
+  /* No JS, or the person prefers reduced motion: skip the typing effect and just show the full text */
+  @media (prefers-reduced-motion: reduce) { .tagline-anim { display: none; } .tagline-static { display: inline; } }
+
   /* One-time entrance animation for the header content */
   @media (prefers-reduced-motion: no-preference) {
     .hero-in { opacity: 0; animation: rise 0.7s cubic-bezier(.2,.7,.3,1) forwards; }
     .hero h1.hero-in { animation-delay: 0.05s; }
     .hero .role.hero-in { animation-delay: 0.2s; }
-    .hero .actions.hero-in { animation-delay: 0.34s; }
+    .hero .tagline.hero-in { animation-delay: 0.27s; }
+    .hero .actions.hero-in { animation-delay: 0.4s; }
     .porthole.hero-in { opacity: 0; animation: rise 0.8s cubic-bezier(.2,.7,.3,1) 0.15s forwards; }
   }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -302,6 +312,7 @@
 </style>
 </head>
 <body>
+<noscript><style>.tagline-anim{display:none}.tagline-static{display:inline}</style></noscript>
 <main>
 
   <header class="hero">
@@ -310,6 +321,10 @@
       <div>
         <h1 class="hero-in">Adam Fitzsimons</h1>
         <p class="role hero-in">Project Manager</p>
+        <p class="tagline hero-in">
+          <span class="tagline-anim" id="tagline-anim" aria-hidden="true"><span id="tagline-text"></span><span class="tagline-cursor" aria-hidden="true"></span></span>
+          <span class="tagline-static">Based in Berlin, and open for work in both Germany or Ireland. I love cooking, baking sourdough bagels, collecting records, travelling and breathing fresh forest air as much as possible &#9752;&#65039;</span>
+        </p>
         <div class="actions hero-in">
           <a class="btn primary" href="#contact">Contact me</a>
         </div>
@@ -571,6 +586,34 @@
     };
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(run);
   }
+
+  // Typing tagline in the header: types sentence A, holds, deletes, types sentence B, holds, deletes, repeats
+  (function () {
+    var el = document.getElementById('tagline-text');
+    if (!el || reducedMotion) return;
+    var sentences = [
+      'Based in Berlin, and open for work in both Germany or Ireland',
+      'I love cooking, baking sourdough bagels, collecting records, travelling and breathing fresh forest air as much as possible \u2618\uFE0F'
+    ];
+    var typeSpeed = 38, deleteSpeed = 22, holdTime = 3000, pauseBetween = 400;
+    var si = 0, ci = 0, deleting = false;
+
+    function tick() {
+      var current = sentences[si];
+      if (!deleting) {
+        ci++;
+        el.textContent = current.slice(0, ci);
+        if (ci === current.length) { setTimeout(function () { deleting = true; tick(); }, holdTime); return; }
+        setTimeout(tick, typeSpeed);
+      } else {
+        ci--;
+        el.textContent = current.slice(0, ci);
+        if (ci === 0) { deleting = false; si = (si + 1) % sentences.length; setTimeout(tick, pauseBetween); return; }
+        setTimeout(tick, deleteSpeed);
+      }
+    }
+    tick();
+  })();
 
   // Fade sections and lists up into view as the user scrolls
   if ('IntersectionObserver' in window) {
