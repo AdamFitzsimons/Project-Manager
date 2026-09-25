@@ -191,6 +191,32 @@
 
   .about p { font-size: 1.2rem; max-width: 62ch; color: var(--abyss); }
   .about p + p { margin-top: 1.1em; }
+  .about-lede { font-style: italic; color: var(--sea); }
+
+  /* Swap between Text A / B / C; fades briefly so the change doesn't feel like a jump-cut */
+  #about-text { transition: opacity 0.18s ease; }
+  #about-text.fading { opacity: 0; }
+
+  /* Styled like the "Learn more" toggle in the timeline cards: plain text, no button chrome */
+  .about-toggle {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--sea);
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .about-toggle .chev { width: 14px; height: 14px; transition: transform 0.2s ease; }
+  .about-toggle.is-expanded .chev { transform: rotate(180deg); }
+  @media (hover: hover) { .about-toggle:hover { color: var(--deep); } }
+  .about-toggle:focus-visible { outline: 3px solid var(--deep); outline-offset: 3px; }
 
   /* Stats sit in their own raised panel, as the section's headline moment */
   .glance-panel {
@@ -425,8 +451,24 @@
       <div class="wrap split">
         <h2 id="about-h">About me</h2>
         <div>
-          <p>I've spent 9+ years turning creative ambition into real-world results; releasing digital and physical products, producing live events, working directly with clients to bring their vision to life. Managing people, timelines and budgets across diverse teams is where I thrive.</p>
-          <p>After years running things from behind a screen, I stepped into a hands-on technical role at Dance GmbH to broaden my understanding of operational workflows. Now I'm excited to bring that end-to-end perspective and cross-industry experience to a new field.</p>
+          <div id="about-text" aria-live="polite">
+            <p>I've spent 9+ years turning creative ambition into real-world results; releasing digital and physical products, producing live events, working directly with clients to bring their vision to life. Managing people, timelines and budgets across diverse teams is where I thrive.</p>
+            <p>After years running things from behind a screen, I stepped into a hands-on technical role at Dance GmbH to broaden my understanding of operational workflows. Now I'm excited to bring that end-to-end perspective and cross-industry experience to a new field.</p>
+          </div>
+          <button type="button" class="about-toggle" id="about-toggle" aria-controls="about-text"><span class="about-toggle-label">View more</span> <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <noscript><style>.about-toggle{display:none}</style></noscript>
+
+          <template id="about-text-b">
+            <p class="about-lede">In the beginning&hellip;</p>
+            <p>Hi all, I'm Adam, a project and operations professional based in Berlin with more than eight years of experience delivering complex physical and digital products. I spent most of my career in the music business, working across product development, e-commerce, touring and live events. I now enjoy applying that experience to more tangible products, services and operations.</p>
+            <p>At Karakter Worldwide, I managed 20+ projects from concept to delivery, with budgets ranging from &euro;1k to &euro;150k. I worked with manufacturers and factories, managed lead times and inventory, coordinated worldwide shipping and ran a D2C webshop and wholesale channel for our artist roster.</p>
+            <p>I also created systems to solve operational problems. For touring teams, I created a centralised live documentation system covering schedules, contacts, payments and production information. It was used across 6+ tours, including two world tours spanning four continents. At SUNANDBASS, I worked on a similar operational database connecting five departments and improving how information flowed between them.</p>
+            <p>More recently, I moved into a hands-on technical role at Dance GmbH to better understand operations and delivery from the inside. I'm a practical, curious person who enjoys fast-paced environments, learning how things work and taking initiative when something needs doing.</p>
+          </template>
+
+          <template id="about-text-c">
+            <p>I make plans. I solve problems. I chase people. Things get done.</p>
+          </template>
         </div>
       </div>
     </section>
@@ -670,6 +712,35 @@
       }
     }
     tick();
+  })();
+
+  // About me: cycle Text A -> B (View more) -> C (View less) -> back to A (View a normal amount)
+  (function () {
+    var btn = document.getElementById('about-toggle');
+    var label = btn ? btn.querySelector('.about-toggle-label') : null;
+    var textEl = document.getElementById('about-text');
+    var tplB = document.getElementById('about-text-b');
+    var tplC = document.getElementById('about-text-c');
+    if (!btn || !label || !textEl || !tplB || !tplC) return;
+
+    var variants = { a: textEl.innerHTML, b: tplB.innerHTML, c: tplC.innerHTML };
+    var labels = { a: 'View more', b: 'View less', c: 'View a normal amount' };
+    var order = ['a', 'b', 'c'];
+    var state = 'a';
+    var reducedMotionAbout = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    btn.addEventListener('click', function () {
+      state = order[(order.indexOf(state) + 1) % order.length];
+      var apply = function () {
+        textEl.innerHTML = variants[state];
+        label.textContent = labels[state];
+        btn.classList.toggle('is-expanded', state === 'b');
+        textEl.classList.remove('fading');
+      };
+      if (reducedMotionAbout) { apply(); return; }
+      textEl.classList.add('fading');
+      setTimeout(apply, 180);
+    });
   })();
 
   // Fade sections and lists up into view as the user scrolls
