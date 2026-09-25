@@ -56,7 +56,7 @@
   h1, h2, h3 { font-family: var(--display); margin: 0; }
   p { margin: 0; }
 
-  .band { padding: clamp(40px, 7vw, 88px) 0; position: relative; overflow: hidden; }
+  .band { padding: clamp(56px, 9vw, 116px) 0; position: relative; overflow: hidden; }
   .split { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: clamp(20px, 4vw, 56px); }
   @media (max-width: 720px) { .split { grid-template-columns: 1fr; } }
 
@@ -229,7 +229,7 @@
   .tags li { padding: 0.4rem 1rem; border: 1px solid rgba(15, 37, 115, 0.45); border-radius: 999px; font-size: 0.98rem; color: var(--abyss); cursor: default; transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s; }
 
   @media (hover: hover) {
-    .tags li:hover { background: var(--deep); border-color: var(--deep); color: #fff; }
+    .tags li:hover { background: var(--deep); border-color: var(--deep); color: var(--accent); }
     .facts li:hover .icon { background: var(--deep); border-color: var(--deep); color: var(--accent); }
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -264,6 +264,10 @@
     z-index: 2;
   }
   .track-icon svg { width: 19px; height: 19px; }
+  /* The scroll-reveal's ".stagger.is-visible > *" rule is more specific than .track-icon's own
+     transform, so once a timeline reveals it would win and drop the -50% centering, making the
+     icon land off-centre until the mouse moves over it. This keeps it centred through the reveal. */
+  .stagger.is-visible > .track-icon { transform: translate(-50%, 0); }
 
   .card {
     background: var(--deep);
@@ -323,7 +327,7 @@
         <p class="role hero-in">Project Manager</p>
         <p class="tagline hero-in">
           <span class="tagline-anim" id="tagline-anim" aria-hidden="true"><span id="tagline-text"></span><span class="tagline-cursor" aria-hidden="true"></span></span>
-          <span class="tagline-static">Based in Berlin, and open for work in both Germany 🇩🇪 or Ireland 🇮🇪. I love baking bagels, collecting records, travelling and breathing fresh forest air as much as possible &#9752;&#65039;</span>
+          <span class="tagline-static">Based in Berlin, and open for work in both Germany &#127465;&#127466; or Ireland &#127470;&#127466;. I love baking bagels, collecting records, travelling and breathing fresh forest air as much as possible &#9752;&#65039;</span>
         </p>
         <div class="actions hero-in">
           <a class="btn primary" href="#contact">Contact me</a>
@@ -394,7 +398,7 @@
   <div class="dark-chapter">
     <section class="band reveal timeline-section" aria-labelledby="tl-h">
       <div class="wrap split">
-        <h2 id="tl-h">What I've done</h2>
+        <h2 id="tl-h">What I&rsquo;ve done</h2>
         <div>
           <p class="group-label">Work</p>
           <ul class="timeline stagger">
@@ -592,18 +596,18 @@
     var el = document.getElementById('tagline-text');
     if (!el || reducedMotion) return;
     var sentences = [
-      'Based in Berlin, and open for work in both Germany or Ireland',
-      'I love cooking, baking sourdough bagels, collecting records, travelling and breathing fresh forest air as much as possible \u2618\uFE0F'
+      { text: 'Based in Berlin, and open for work in both Germany \uD83C\uDDE9\uD83C\uDDEA or Ireland \uD83C\uDDEE\uD83C\uDDEA', hold: 3000 },
+      { text: 'I love baking bagels, collecting records, travelling and breathing fresh forest air as much as possible \u2618\uFE0F', hold: 4000 }
     ];
-    var typeSpeed = 38, deleteSpeed = 22, holdTime = 3000, pauseBetween = 400;
+    var typeSpeed = 38, deleteSpeed = 22, pauseBetween = 400;
     var si = 0, ci = 0, deleting = false;
 
     function tick() {
-      var current = sentences[si];
+      var current = sentences[si].text;
       if (!deleting) {
         ci++;
         el.textContent = current.slice(0, ci);
-        if (ci === current.length) { setTimeout(function () { deleting = true; tick(); }, holdTime); return; }
+        if (ci === current.length) { setTimeout(function () { deleting = true; tick(); }, sentences[si].hold); return; }
         setTimeout(tick, typeSpeed);
       } else {
         ci--;
