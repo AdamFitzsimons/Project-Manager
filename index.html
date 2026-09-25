@@ -192,7 +192,6 @@
   .about p { font-size: 1.2rem; max-width: 62ch; color: var(--abyss); }
   .about p + p { margin-top: 1.1em; }
   .about-lede { font-style: italic; color: var(--sea); }
-  #about-h { scroll-margin-top: 40px; }
 
   /* Swap between Text A / B / C; fades briefly so the change doesn't feel like a jump-cut */
   #about-text { transition: opacity 0.18s ease; }
@@ -733,7 +732,7 @@
     var aboutHeading = document.getElementById('about-h');
 
     btn.addEventListener('click', function () {
-      if (aboutHeading) { aboutHeading.scrollIntoView({ block: 'start' }); }
+      if (aboutHeading) { aboutHeading.scrollIntoView({ block: 'center' }); }
       state = order[(order.indexOf(state) + 1) % order.length];
       var apply = function () {
         textEl.innerHTML = variants[state];
