@@ -729,7 +729,10 @@
     var state = 'a';
     var reducedMotionAbout = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    var aboutHeading = document.getElementById('about-h');
+
     btn.addEventListener('click', function () {
+      if (aboutHeading) { aboutHeading.scrollIntoView({ block: 'start' }); }
       state = order[(order.indexOf(state) + 1) % order.length];
       var apply = function () {
         textEl.innerHTML = variants[state];
